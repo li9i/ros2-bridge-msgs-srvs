@@ -1,0 +1,38 @@
+-- terminal 1 (ROS 1)
+
+cd catkin_ws/
+source /opt/ros/noetic/setup.bash
+catkin_make_isolated --install
+catkin_make
+source devel/setup.bash
+roscore
+
+
+-- terminal 2 (ROS 2)
+cd ros2_ws/
+source /opt/ros/foxy/setup.bash
+colcon build
+source install/local_setup.bash
+ros2 run cpp_pubsub listener
+
+
+-- terminal 3 (ROS 1 + ROS 2)
+
+source /opt/ros/noetic/setup.bash
+source /opt/ros/foxy/setup.bash
+source catkin_ws/install_isolated/setup.bash
+source ros2_ws/install/local_setup.bash
+cd bridge_ws/
+colcon build --packages-select ros1_bridge --cmake-force-configure
+source /opt/ros/noetic/setup.bash
+source /opt/ros/foxy/setup.bash
+source install/local_setup.bash
+ros2 run ros1_bridge dynamic_bridge --bridge-all-topics
+
+
+-- terminal 4 (ROS 1)
+
+source /opt/ros/noetic/setup.bash
+source catkin_ws/install_isolated/setup.bash
+source catkin_ws/devel/setup.bash
+roslaunch ros1_talker ros1_talker.launch

@@ -1,0 +1,40 @@
+0. Build. If not build then skip. Open a terminal (not a terminator) with three tabs
+
+    cd custom_bridge_docker && docker build --progress=plain --no-cache -t li9i/bridge_ros1_ros2_custom:latest .
+    cd ros1_out_docker && docker build --progress=plain --no-cache -t li9i/ros1_out:latest .
+    cd ros2_out_docker && docker build --progress=plain --no-cache -t li9i/ros2_out:latest .
+
+1. In the same tabs
+
+    docker run -it --ipc=host --net=host --rm li9i/bridge_ros1_ros2_custom:latest
+    docker run -it --ipc=host --net=host --rm li9i/ros1_out:latest
+    docker run -it --ipc=host --net=host --rm li9i/ros2_out:latest
+
+2. Open a terminal and execute
+    docker container ls
+    Grab the names of all containers. Let them be dname_bridge, dname_ros1, dname_ros2
+
+3. Open up a terminator with four groups and execute the following to all four of them (don't copy-paste)
+    docker exec -it dname_bridge bash
+
+4. Top left:
+    ./11.ros1_roscore.sh
+Bottom right:
+    ./12.ros2_run.sh
+Top right:
+    ./13.bridge_run.sh
+Bottom left:
+    ./14.ros1_run.sh
+
+
+5. Open up a terminal with two tabs (don't copy-paste)
+
+    docker exec -it dname_ros1 bash
+    docker exec -it dname_ros2 bash
+
+6. First tab:
+    ./1.roslaunch.sh
+
+7. Second tab:
+    ./1.ros2run_talker.sh
+
